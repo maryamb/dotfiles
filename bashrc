@@ -1,0 +1,1 @@
+/home/maryam/.bashrc
