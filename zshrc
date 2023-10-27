@@ -141,6 +141,7 @@ else
 fi
 
 alias pp='ps -afx -o pid,state,start_time,rss,size,%cpu,args'
+alias bat='bat --list-themes'
 
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.cache/zsh
