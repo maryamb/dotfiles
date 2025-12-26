@@ -125,23 +125,12 @@ alias 4='cd -4'
 alias 5='cd -5'
 
 alias p1='patch -p1 -g1 --dry-run'
-
-#if [[ -f /bin/exa ]]; then
-#  alias l='exa -l'
-#  alias ll='exa -la'
-#  alias ls='exa'
-if [[ -f /bin/lsd ]]; then
-  alias l='lsd -l'
-  alias ll='lsd -Al --size=short'
-  alias ls='lsd'
-else
-  alias l='ls -l'
-  alias ll='ls -Alh'
-  alias ls='/bin/ls --color=auto'
-fi
-
-alias pp='ps -afx -o pid,state,start_time,rss,size,%cpu,args'
-alias bat='bat --list-themes'
+alias bat=cat
+alias du=dust
+alias find=fd
+alias ps=procs
+alias cd=z
+alias ls='lsd -al'
 
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.cache/zsh
@@ -181,13 +170,6 @@ maybe_source ~/.bashrc.local
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 
-# >>> juliaup initialize >>>
 
-# !! Contents within this block are managed by juliaup !!
-
-path=('/home/maryam/.julia/juliaup/bin' $path)
-export PATH
-
-# <<< juliaup initialize <<<
 
 # alias wezterm="$HOME/bin/wezterm"
