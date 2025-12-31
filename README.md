@@ -26,8 +26,14 @@ alias grep=rg
 alias ps=procs
 alias ls='lsd -al'
 
+Add this to your ~/.zshrc:
+zsheval "$(zoxide init zsh)"
+
 sudo apt install lazygit
 sudo apt install lnav
+sudo apt install yazi (file manager in text)
+sudo apt install moreutils
+sudo apt install pandoc  # convert between different file types
 
 
 zsh-fast-syntax-highlighting
@@ -35,3 +41,8 @@ zsh-fzf-history-search
 zsh-fzf-tab
 zsh-fzf-search-multi-word
 zsh-vi-mode
+
+
+nushell ( consider as a substitude for zsh)
+fish
+
