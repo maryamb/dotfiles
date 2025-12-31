@@ -17,3 +17,21 @@ My dot files
 `cargo install zoxide`    Alternative to cd. Use: `z ~/Downloads`
 
 `cargo install lsd`       Alternative to ls.
+
+
+alias cat=bat
+alias du=dust
+alias find=fd
+alias grep=rg
+alias ps=procs
+alias ls='lsd -al'
+
+sudo apt install lazygit
+sudo apt install lnav
+
+
+zsh-fast-syntax-highlighting
+zsh-fzf-history-search
+zsh-fzf-tab
+zsh-fzf-search-multi-word
+zsh-vi-mode
