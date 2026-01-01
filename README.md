@@ -34,6 +34,8 @@ sudo apt install lnav
 sudo apt install yazi (file manager in text)
 sudo apt install moreutils
 sudo apt install pandoc  # convert between different file types
+sudo apt install television  # tv: A fuzzy search commandline tool.
+
 
 
 zsh-fast-syntax-highlighting
