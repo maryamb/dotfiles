@@ -297,6 +297,10 @@ maybe_source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlight
 maybe_source ~/.zzz_profile.sh
 maybe_source ~/.bashrc.local
 
+zsheval "$(zoxide init zsh)"
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
