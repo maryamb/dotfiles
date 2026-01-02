@@ -145,7 +145,7 @@ maybe_source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlight
 maybe_source ~/.zzz_profile.sh
 maybe_source ~/.bashrc.local
 
-zsheval "$(zoxide init zsh)"
+eval "$(zoxide init zsh)"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
