@@ -1,84 +1,140 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+#!/bin/bash
 
-# If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+# ============================================================================
+# Modern CLI Tools Installation Script
+# ============================================================================
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
+set -e
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+echo "🚀 Installing modern CLI tools..."
+echo ""
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+# ============================================================================
+# RUST TOOLS (via cargo)
+# ============================================================================
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+echo "📦 Installing Rust-based tools..."
+echo ""
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+if ! command -v cargo &> /dev/null; then
+    echo "❌ cargo not found. Please install Rust first:"
+    echo "   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+    exit 1
 fi
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+# Array of cargo tools to install
+cargo_tools=(
+    "bat"           # cat replacement with syntax highlighting
+    "du-dust"       # du replacement with better visualization
+    "fd-find"       # find replacement, faster and easier to use
+    "ripgrep"       # grep replacement, extremely fast
+    "procs"         # ps replacement with better interface
+    "tlrc"          # tldr client for quick command examples
+    "zoxide"        # smart cd replacement that learns your habits
+    "lsd"           # ls replacement with colors and icons
+)
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+for tool in "${cargo_tools[@]}"; do
+    echo "Installing $tool..."
+    cargo install "$tool"
+done
+
+echo ""
+echo "✅ Rust tools installed!"
+echo ""
+
+# ============================================================================
+# APT PACKAGES (Debian/Ubuntu)
+# ============================================================================
+
+echo "📦 Installing system packages..."
+echo ""
+
+if ! command -v apt &> /dev/null; then
+    echo "⚠️  apt not found. Skipping apt packages."
+    echo "   (Install these manually if you're not on Debian/Ubuntu)"
+else
+    apt_packages=(
+        "lazygit"       # Terminal UI for git
+        "lnav"          # Log file navigator
+        "yazi"          # Terminal file manager
+        "moreutils"     # Collection of Unix tools
+        "pandoc"        # Universal document converter
+        "fzf"           # Fuzzy finder
+    )
+
+    for package in "${apt_packages[@]}"; do
+        echo "Installing $package..."
+        sudo apt install -y "$package" || echo "⚠️  Failed to install $package"
+    done
+
+    # Television requires special handling (may not be in default repos)
+    echo ""
+    echo "📺 For 'television' (tv command), install from:"
+    echo "   https://github.com/alexpasmantier/television"
 fi
 
-# colored GCC warnings and errors
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+echo ""
+echo "✅ System packages installed!"
+echo ""
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# ============================================================================
+# VERIFICATION
+# ============================================================================
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+echo "🔍 Verifying installations..."
+echo ""
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+commands=(
+    "bat:cat replacement"
+    "dust:du replacement"
+    "fd:find replacement"
+    "rg:grep replacement"
+    "procs:ps replacement"
+    "tldr:man replacement"
+    "zoxide:cd replacement"
+    "lsd:ls replacement"
+    "lazygit:git TUI"
+    "lnav:log viewer"
+    "yazi:file manager"
+    "pandoc:document converter"
+    "fzf:fuzzy finder"
+)
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+for cmd_info in "${commands[@]}"; do
+    cmd="${cmd_info%%:*}"
+    desc="${cmd_info##*:}"
+    if command -v "$cmd" &> /dev/null; then
+        echo "✅ $cmd ($desc)"
+    else
+        echo "❌ $cmd ($desc) - not found"
+    fi
+done
 
-# maryam (to use with abr control library)
-export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libGLEW.so
-
-# >>> juliaup initialize >>>
-
-# !! Contents within this block are managed by juliaup !!
-
-case ":$PATH:" in *:/home/maryam/.julia/juliaup/bin:*);; *)
-    export PATH=/home/maryam/.julia/juliaup/bin${PATH:+:${PATH}};;
-esac
-
-export EDITOR=vim
-
-# <<< juliaup initialize <<<
-. "$HOME/.cargo/env"
-
-# Dapster variables
-export PATH_TO_CONTAINER_ROOT=$HOME/code
-
-export DOCKERID=maryambandari
-export DOCKERID=bandariwork
+echo ""
+echo "============================================================================"
+echo "🎉 Installation complete!"
+echo "============================================================================"
+echo ""
+echo "Next steps:"
+echo "  1. Backup your current .zshrc:"
+echo "     cp ~/.zshrc ~/.zshrc.backup"
+echo ""
+echo "  2. Replace ~/.zshrc with the new organized version"
+echo ""
+echo "  3. Reload your shell:"
+echo "     source ~/.zshrc"
+echo ""
+echo "Quick command reference:"
+echo "  bat file.txt          # View file with syntax highlighting"
+echo "  dust ~/Downloads      # See directory sizes"
+echo "  fd controller         # Find files by name"
+echo "  rg TODO src           # Search for text in files"
+echo "  procs                 # Better process list"
+echo "  tldr ls               # Quick command examples"
+echo "  z ~/Downloads         # Jump to frequently used directories"
+echo "  lsd -al               # Better ls with colors and icons"
+echo "  lazygit               # Git TUI"
+echo "  lnav /var/log/*.log   # Interactive log viewer"
+echo "  yazi                  # Terminal file manager"
+echo ""
