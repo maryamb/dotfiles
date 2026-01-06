@@ -26,11 +26,8 @@ fi
 cargo_tools=(
     "bat"           # cat replacement with syntax highlighting
     "du-dust"       # du replacement with better visualization
-    "fd-find"       # find replacement, faster and easier to use
-    "ripgrep"       # grep replacement, extremely fast
     "procs"         # ps replacement with better interface
     "tlrc"          # tldr client for quick command examples
-    "zoxide"        # smart cd replacement that learns your habits
     "lsd"           # ls replacement with colors and icons
 )
 
@@ -38,6 +35,29 @@ for tool in "${cargo_tools[@]}"; do
     echo "Installing $tool..."
     cargo install "$tool"
 done
+
+echo ""
+echo "✅ Rust tools installed!"
+echo ""
+
+# ============================================================================
+# YAZI INSTALLATION (from official binary release)
+# ============================================================================
+
+echo "📦 Installing yazi (terminal file manager)..."
+echo ""
+
+YAZI_VERSION=$(curl -s "https://api.github.com/repos/sxyazi/yazi/releases/latest" | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+YAZI_URL="https://github.com/sxyazi/yazi/releases/download/v${YAZI_VERSION}/yazi-x86_64-unknown-linux-gnu.zip"
+
+echo "Downloading yazi v${YAZI_VERSION}..."
+wget -q "$YAZI_URL" -O /tmp/yazi.zip
+unzip -q /tmp/yazi.zip -d /tmp/
+sudo install -Dm755 /tmp/yazi-x86_64-unknown-linux-gnu/yazi ~/.cargo/bin/yazi
+sudo install -Dm755 /tmp/yazi-x86_64-unknown-linux-gnu/ya ~/.cargo/bin/ya
+rm -rf /tmp/yazi.zip /tmp/yazi-x86_64-unknown-linux-gnu
+
+echo "✅ yazi installed!"
 
 echo ""
 echo "✅ Rust tools installed!"
@@ -55,14 +75,22 @@ if ! command -v apt &> /dev/null; then
     echo "   (Install these manually if you're not on Debian/Ubuntu)"
 else
     apt_packages=(
-        "lazygit"       # Terminal UI for git
-        "lnav"          # Log file navigator
-        "yazi"          # Terminal file manager
-        "moreutils"     # Collection of Unix tools
-        "pandoc"        # Universal document converter
-        "fzf"           # Fuzzy finder
+        "lazygit"           # Terminal UI for git
+        "lnav"              # Log file navigator
+        "moreutils"         # Collection of Unix tools
+        "pandoc"            # Universal document converter
+        "ffmpeg"            # Video/audio processing (for yazi)
+        "7zip"              # Archive support (for yazi)
+        "jq"                # JSON processor (for yazi)
+        "poppler-utils"     # PDF support (for yazi)
+        "fd-find"           # Find replacement (for yazi)
+        "ripgrep"           # Grep replacement (for yazi)
+        "fzf"               # Fuzzy finder (for yazi)
+        "zoxide"            # Smart cd (for yazi)
+        "imagemagick"       # Image processing (for yazi)
     )
 
+    echo "Installing system packages (including yazi dependencies)..."
     for package in "${apt_packages[@]}"; do
         echo "Installing $package..."
         sudo apt install -y "$package" || echo "⚠️  Failed to install $package"
